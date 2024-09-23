@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cake Ordering System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('cake2.jpg');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      color: white;
+    }
+
+    header {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1, h2, h3, p {
+      color: white;
+    }
+
+    section {
+      padding: 20px;
+      margin: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+    }
+
+    input, button, select {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      color: black;
+    }
+
+    button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #db7093;
+    }
+
+    a {
+      color: #ff69b4;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-button, .forward-button {
+      display: inline-block;
+      margin: 10px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .cart-details, .payment-details {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: black;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .image-button {
+      border: none;
+      background: none;
+      padding: 10px;
+      cursor: pointer;
+      width: 150px;
+      height: 150px;
+      display: inline-block;
+      margin: 10px;
+    }
+
+    .image-button img {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    #total-amount {
+      color: yellow;
+      font-weight: bold;
+    }
+
+    #loading-symbol {
+      font-size: 24px;
+    }
+
+    /* Admin Button Styles */
+    .admin-button {
+      display: inline-block;
+      background-color: #008CBA;
+      padding: 15px;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      width: 150px;
+    }
+
+    .admin-button:hover {
+      background-color: #005f6b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Page -->
+  <section id="login-section">
+    <h2>Login</h2>
+    <form id="login-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" placeholder="Enter username">
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter password">
+
+      <button type="button" onclick="login()">Login</button>
+
+      <a href="#" onclick="showRegisterPage()">Register</a> |
+      <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+
+      <!-- Admin Button -->
+      <button type="button" onclick="showAdminLogin()">Admin</button>
+    </form>
+  </section>
+
+  <!-- Admin Login Page -->
+  <section id="admin-login-section" style="display:none;">
+    <span class="back-button" onclick="goBack()">← Back</span>
+    <h2>Admin Login</h2>
+    <form id="admin-login-form">
+      <label for="admin-username">Admin Username:</label>
+      <input type="text" id="admin-username" placeholder="Enter admin username">
+
+      <label for="admin-password">Admin Password:</label>
+      <input type="password" id="admin-password" placeholder="Enter admin password">
+
+      <button type="button" onclick="adminLogin()">Admin Login</button>
+    </form>
+  </section>
+
+  <!-- Register Page -->
+  <section id="register-section" style="display:none;">
+    <span class="back-button" onclick="goBack()">← Back</span>
+    <h2>Register</h2>
+    <form id="register-form">
+      <label for="reg-name">Name:</label>
+      <input type="text" id="reg-name" placeholder="Enter your name">
+
+      <label for="reg-username">Username:</label>
+      <input type="text" id="reg-username" placeholder="Enter username">
+
+      <label for="reg-password">Password:</label>
+      <input type="password" id="reg-password" placeholder="Enter password">
+
+      <button type="button" onclick="register()">Register</button>
+    </form>
+  </section>
+
+  <!-- Home Page -->
+  <section id="home-section" style="display:none;">
+    <span class="back-button" onclick="goBack()">← Back</span>
+    <span class="forward-button" onclick="goForward()">→ Forward</span>
+    <h2>Welcome to the Cake Ordering System</h2>
+    <p>Here you can find a wide variety of cakes, including daily specials and more!</p>
+
+    <h3>Our Special Cakes</h3>
+    <button class="image-button" onclick="redirectToCartStatus()">
+      <img src="cake1.jpg" alt="Cake 1">
+    </button>   
+    <button class="image-button" onclick="redirectToCartStatus()">
+      <img src="cake2.jpg" alt="Cake 2">
+    </button>
+    <button class="image-button" onclick="redirectToCartStatus()">
+      <img src="cake3.jpg" alt="Cake 3">
+    </button>
+    <button class="image-button" onclick="redirectToCartStatus()">
+      <img src="cake4.jpg" alt="Cake 4">
+    </button>
+    <button class="image-button" onclick="redirectToCartStatus()">
+      <img src="cake5.jpg" alt="Cake 5">
+    </button>
+  </section>
+
+  <!-- Cart Status Page -->
+  <section id="cart-status-section" style="display:none;">
+    <span class="back-button" onclick="goBack()">← Back</span>
+    <span class="forward-button" onclick="goForward()">→ Forward</span>
+    <h2>Cart Status</h2>
+    <form id="cart-form">
+      <label for="cake-weight">Select Cake Weight:</label>
+      <select id="cake-weight" onchange="calculateAmount()">
+        <option value="1">1 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+
+      <label for="cake-toppings">Enter Toppings:</label>
+      <input type="text" id="cake-toppings" placeholder="e.g., Choco Buttons, Sprinkles" oninput="calculateAmount()">
+
+      <div class="cart-details">
+        <h3>Amount to be Paid: ₹<span id="total-amount">0</span></h3>
+      </div>
+
+      <button type="button" onclick="redirectToPayment()">Pay Now</button>
+    </form>
+  </section>
+
+  <!-- Payment Process Page -->
+  <!-- Payment Process Page -->
+<section id="payment-process-section" style="display:none;">
+  <span class="back-button" onclick="goBack()">← Back</span>
+  <span class="forward-button" onclick="goForward()">→ Forward</span>
+  <h2>Payment Process</h2>
+  <form id="payment-form">
+    <label for="payment-method">Select Payment Method:</label>
+    <select id="payment-method" onchange="toggleCardDetails()">
+      <option value="upi">UPI</option>
+      <option value="credit">Credit Card</option>
+      <option value="debit">Debit Card</option>
+    </select>
+
+    <!-- Card details, hidden by default -->
+    <div class="payment-details" id="card-details" style="display:none;">
+      <label for="card-number">Card Number:</label>
+      <input type="text" id="card-number" placeholder="Enter your card number">
+
+      <label for="cvv">CVV:</label>
+      <input type="text" id="cvv" placeholder="CVV">
+
+      <label for="expiry-date">Expiry Date:</label>
+      <input type="text" id="expiry-date" placeholder="MM/YY">
+    </div>
+
+    <label for="voucher">Voucher Code (Optional):</label>
+    <input type="text" id="voucher" placeholder="Enter voucher code if any">
+
+    <div class="cart-details">
+      <h3>Total Amount: ₹<span id="total-amount-payment">0</span></h3>
+    </div>
+
+    <button type="button" onclick="processPayment()">Pay Now</button>
+  </form>
+</section>
+
+<script>
+  // Function to toggle card details visibility
+  function toggleCardDetails() {
+    const paymentMethod = document.getElementById("payment-method").value;
+    const cardDetailsDiv = document.getElementById("card-details");
+
+    // Show card details if credit or debit card is selected
+    if (paymentMethod === "credit" || paymentMethod === "debit") {
+      cardDetailsDiv.style.display = "block";
+    } else {
+      cardDetailsDiv.style.display = "none";
+    }
+  }
+
+  function processPayment() {
+    const paymentMethod = document.getElementById("payment-method").value;
+    if (paymentMethod === "credit" || paymentMethod === "debit") {
+      const cardNumber = document.getElementById("card-number").value;
+      const cvv = document.getElementById("cvv").value;
+      const expiryDate = document.getElementById("expiry-date").value;
+      if (!cardNumber || !cvv || !expiryDate) {
+        alert("Please fill in all the card details.");
+        return;
+      }
+    }
+    alert("Payment processed successfully!");
+  }
+</script>
+
+
+
+  <!-- OTP Page -->
+  <section id="otp-section" style="display:none;">
+    <h2>Enter OTP</h2>
+    <div id="loading-symbol">Processing...</div>
+    <form id="otp-form" style="display:none;">
+      <input type="text" id="otp-input" placeholder="Enter OTP">
+      <button type="button" onclick="submitOtp()">Submit OTP</button>
+    </form>
+  </section>
+
+  <!-- Admin Dashboard Page -->
+  <section id="admin-dashboard-section" style="display:none;">
+    <span class="back-button" onclick="goBack()">← Back</span>
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, Admin! Manage cake orders here.</p>
+
+    <!-- Cake Management Options -->
+    <button class="admin-button" onclick="manageCakeDetails()">Cake Details</button>
+    <button class="admin-button" onclick="manageDeliveryStatus()">Delivery Status</button>
+    <button class="admin-button" onclick="managePaymentProcess()">Payment Process</button>
+    <button class="admin-button" onclick="manageDiscounts()">Manage Discounts</button>
+    <button class="admin-button" onclick="manageUsers()">Manage Users</button>
+
+    <div id="admin-content" style="margin-top: 20px;"></div>
+  </section>
+
+  <script>
+    let currentPageIndex = 0;
+
+    function showRegisterPage() {
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("register-section").style.display = "block";
+    }
+
+    function forgotPassword() {
+      alert("Password reset link sent to your email!");
+    }
+
+    function login() {
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("home-section").style.display = "block";
+      currentPageIndex = 1;
+    }
+
+    function showAdminLogin() {
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("admin-login-section").style.display = "block";
+      currentPageIndex = 5; // Update currentPageIndex accordingly
+    }
+
+    function adminLogin() {
+      const adminUsername = document.getElementById("admin-username").value;
+      const adminPassword = document.getElementById("admin-password").value;
+
+      if (adminUsername === "admin" && adminPassword === "admin123") { // Replace with actual admin credentials
+        document.getElementById("admin-login-section").style.display = "none";
+        document.getElementById("admin-dashboard-section").style.display = "block";
+        currentPageIndex = 6; // Update currentPageIndex accordingly
+      } else {
+        alert("Invalid admin credentials!");
+      }
+    }
+
+    function register() {
+      alert("You have successfully registered!");
+      document.getElementById("register-section").style.display = "none";
+      document.getElementById("login-section").style.display = "block";
+    }
+
+    function goBack() {
+      const sections = [
+        "login-section",
+        "home-section",
+        "cart-status-section",
+        "payment-process-section",
+        "otp-section",
+        "admin-login-section",
+        "admin-dashboard-section"
+      ];
+      document.getElementById(sections[currentPageIndex]).style.display = "none";
+      currentPageIndex = currentPageIndex - 1;
+      if (currentPageIndex < 0) {
+        currentPageIndex = 0;
+      }
+      document.getElementById(sections[currentPageIndex]).style.display = "block";
+    }
+
+    function goForward() {
+      const sections = [
+        "login-section",
+        "home-section",
+        "cart-status-section",
+        "payment-process-section",
+        "otp-section",
+        "admin-login-section",
+        "admin-dashboard-section"
+      ];
+      document.getElementById(sections[currentPageIndex]).style.display = "none";
+      currentPageIndex = currentPageIndex + 1;
+      if (currentPageIndex >= sections.length) {
+        currentPageIndex = sections.length - 1;
+      }
+      document.getElementById(sections[currentPageIndex]).style.display = "block";
+    }
+
+    function redirectToCartStatus() {
+      document.getElementById("home-section").style.display = "none";
+      document.getElementById("cart-status-section").style.display = "block";
+      currentPageIndex = 2;
+    }
+
+    function calculateAmount() {
+      const weight = document.getElementById("cake-weight").value;
+      const toppingsText = document.getElementById("cake-toppings").value;
+      let toppings = toppingsText ? toppingsText.split(",").length : 0;
+      const totalAmount = weight * 500 + toppings * 50;
+      document.getElementById("total-amount").innerText = totalAmount;
+      document.getElementById("total-amount-payment").innerText = totalAmount;
+    }
+
+    function redirectToPayment() {
+      document.getElementById("cart-status-section").style.display = "none";
+      document.getElementById("payment-process-section").style.display = "block";
+      currentPageIndex = 3;
+    }
+
+    function processPayment() {
+      document.getElementById("payment-process-section").style.display = "none";
+      document.getElementById("otp-section").style.display = "block";
+      currentPageIndex = 4;
+      setTimeout(function () {
+        document.getElementById("loading-symbol").style.display = "none";
+        document.getElementById("otp-form").style.display = "block";
+      }, 2000);
+    }
+
+    function submitOtp() {
+      alert("Payment successful!");
+      document.getElementById("otp-section").style.display = "none";
+      document.getElementById("home-section").style.display = "block";
+      currentPageIndex = 1;
+    }
+
+    // Admin Dashboard Functions
+    function manageCakeDetails() {
+      document.getElementById('admin-content').innerHTML = "<h3>Cake Details:</h3><p>Here you can manage cake details.</p>";
+    }
+
+    function manageDeliveryStatus() {
+      document.getElementById('admin-content').innerHTML = "<h3>Delivery Status:</h3><p>Track the delivery status of orders here.</p>";
+    }
+
+    function managePaymentProcess() {
+      document.getElementById('admin-content').innerHTML = "<h3>Payment Process:</h3><p>Manage the payment process and verify transactions.</p>";
+    }
+
+    function manageDiscounts() {
+      document.getElementById('admin-content').innerHTML = "<h3>Manage Discounts:</h3><p>Create and manage discount codes here.</p>";
+    }
+
+    function manageUsers() {
+      document.getElementById('admin-content').innerHTML = "<h3>Manage Users:</h3><p>Administer users and control their access.</p>";
+    }
+  </script>
+</body>
+</html>                                                                                                                                add a page called order status i will give the code of it                                                   <!-- Order Status Page -->
+  <section id="order-status-section" style="display:none;">
+    <span class="back-button" onclick="goBack()">← Back</span>
+    <span class="forward-button" onclick="goForward()">→ Forward</span>
+    <h2>Order Status</h2>
+    <div class="order-details">
+      <p>Weight: <span id="order-weight"></span></p>
+      <p>Toppings: <span id="order-toppings"></span></p>
+      <p>Amount Paid: ₹<span id="order-amount"></span></p>
+    </div>
+
+    <div class="cart-details">
+      <p>Expected Delivery Date: <span id="delivery-date"></span></p>
+      <p>Shipping Address: <span id="shipping-address"></span></p>
+    </div>
+
+    <button type="button" onclick="redirectToHome()">Go to Home</button>
+  </section>
